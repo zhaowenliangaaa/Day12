@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.JiyunStudentMapper">
+  <resultMap id="BaseResultMap" type="com.xiaoshu.entity.JiyunStudent">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="course_id" jdbcType="INTEGER" property="courseId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="code" jdbcType="INTEGER" property="code" />
+    <result column="grade" jdbcType="VARCHAR" property="grade" />
+    <result column="entrytime" jdbcType="TIMESTAMP" property="entrytime" />
+    <result column="createtime" jdbcType="TIMESTAMP" property="createtime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, course_id, name, age, code, grade, entrytime, createtime
+  </sql>
+  <select id="findPage" resultType="jiyunStudent" parameterType="jiyunStudent">
+  	SELECT s.*,c.name cname 
+		FROM jiyun_student s,course c
+  		<where>
+  		s.course_id = c.id
+  			<if test="name!=null and name!=''">
+  				and sname like '%${name}%'
+  			</if>
+			<if test="grade!=null and grade!=''">
+  				and s.grade=#{grade}
+  			</if>
+  			<if test="b1!=null">
+  				and s.entrytime &gt;=#{b1}
+  			</if>
+  			<if test="b2!=null">
+  				and s.entrytime &lt;=#{b2}
+  			</if>
+  		</where>
+  </select>
+  
+  <select id="echartsStudent" resultType="jiyunStudent">
+		   SELECT COUNT(s.id) AS num ,c.name cname 
+		  FROM jiyun_student s LEFT JOIN 
+		 course c ON s.course_id = c.id GROUP BY c.id
+  </select>
+</mapper>
